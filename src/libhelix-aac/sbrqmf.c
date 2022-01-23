@@ -60,7 +60,7 @@
  *   x =  sin(angle);
  * }
  */
-static const int cos4sin4tab64[64] PROGMEM = {
+static const int cos4sin4tab64[64] = {
 	0x40c7d2bd, 0x00c90e90, 0x424ff28f, 0x3ff4e5e0, 0x43cdd89a, 0x03ecadcf, 0x454149fc, 0x3fc395f9,
 	0x46aa0d6d, 0x070de172, 0x4807eb4b, 0x3f6af2e3, 0x495aada2, 0x0a2abb59, 0x4aa22036, 0x3eeb3347,
 	0x4bde1089, 0x0d415013, 0x4d0e4de2, 0x3e44a5ef, 0x4e32a956, 0x104fb80e, 0x4f4af5d1, 0x3d77b192,
@@ -81,7 +81,7 @@ static const int cos4sin4tab64[64] PROGMEM = {
  *   x = sin(angle);
  * }
  */
-static const int cos1sin1tab64[34] PROGMEM = {
+static const int cos1sin1tab64[34] = {
 	0x40000000, 0x00000000, 0x43103085, 0x0323ecbe, 0x45f704f7, 0x0645e9af, 0x48b2b335, 0x09640837, 
 	0x4b418bbe, 0x0c7c5c1e, 0x4da1fab5, 0x0f8cfcbe, 0x4fd288dc, 0x1294062f, 0x51d1dc80, 0x158f9a76, 
 	0x539eba45, 0x187de2a7, 0x553805f2, 0x1b5d100a, 0x569cc31b, 0x1e2b5d38, 0x57cc15bc, 0x20e70f32, 
@@ -222,12 +222,12 @@ static void PostMultiply64(int *fft1, int nSampsOut)
  * Notes:       this is carefully written to be efficient on ARM
  *              use the assembly code version in sbrqmfak.s when building for ARM!
  **************************************************************************************/
-#if (defined (__arm) && defined (__ARMCC_VERSION)) || (defined (_WIN32) && defined (_WIN32_WCE) && defined (ARM)) || (defined(__GNUC__) && defined(__arm__))
-#ifdef __cplusplus
-extern "C"
-#endif
-void QMFAnalysisConv(int *cTab, int *delay, int dIdx, int *uBuf);
-#else
+// #if (defined (__arm) && defined (__ARMCC_VERSION)) || (defined (_WIN32) && defined (_WIN32_WCE) && defined (ARM)) || (defined(__GNUC__) && defined(__arm__))
+// #ifdef __cplusplus
+// extern "C"
+// #endif
+// void QMFAnalysisConv(int *cTab, int *delay, int dIdx, int *uBuf);
+// #else
 void QMFAnalysisConv(int *cTab, int *delay, int dIdx, int *uBuf)
 {
 	int k, dOff;
@@ -280,7 +280,7 @@ void QMFAnalysisConv(int *cTab, int *delay, int dIdx, int *uBuf)
 		dOff--;
 	}
 }
-#endif
+// #endif
 
 /**************************************************************************************
  * Function:    QMFAnalysis
@@ -395,12 +395,12 @@ int QMFAnalysis(int *inbuf, int *delay, int *XBuf, int fBitsIn, int *delayIdx, i
  * Notes:       this is carefully written to be efficient on ARM
  *              use the assembly code version in sbrqmfsk.s when building for ARM!
  **************************************************************************************/
-#if (defined (__arm) && defined (__ARMCC_VERSION)) || (defined (_WIN32) && defined (_WIN32_WCE) && defined (ARM)) || (defined(__GNUC__) && defined(__arm__))
-#ifdef __cplusplus
-extern "C"
-#endif
-void QMFSynthesisConv(int *cPtr, int *delay, int dIdx, short *outbuf, int nChans);
-#else
+// #if (defined (__arm) && defined (__ARMCC_VERSION)) || (defined (_WIN32) && defined (_WIN32_WCE) && defined (ARM)) || (defined(__GNUC__) && defined(__arm__))
+// #ifdef __cplusplus
+// extern "C"
+// #endif
+// void QMFSynthesisConv(int *cPtr, int *delay, int dIdx, short *outbuf, int nChans);
+// #else
 void QMFSynthesisConv(int *cPtr, int *delay, int dIdx, short *outbuf, int nChans)
 {
 	int k, dOff0, dOff1;
@@ -431,7 +431,7 @@ void QMFSynthesisConv(int *cPtr, int *delay, int dIdx, short *outbuf, int nChans
 		outbuf += nChans;
 	}
 }
-#endif
+// #endif
 
 /**************************************************************************************
  * Function:    QMFSynthesis

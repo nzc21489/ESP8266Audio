@@ -21,7 +21,8 @@
 
 #pragma GCC optimize ("O3")
 
-#include <pgmspace.h>
+// #include <pgmspace.h>
+#include <string.h>
 #  include "config.h"
 
 # include "global.h"
@@ -96,7 +97,7 @@ static
 struct {
   unsigned int slen1;
   unsigned int slen2;
-} const sflen_table[16] PROGMEM = {
+} const sflen_table[16] = {
   { 0, 0 }, { 0, 1 }, { 0, 2 }, { 0, 3 },
   { 3, 0 }, { 1, 1 }, { 1, 2 }, { 1, 3 },
   { 2, 1 }, { 2, 2 }, { 2, 3 }, { 3, 1 },
@@ -108,7 +109,7 @@ struct {
    derived from section 2.4.3.2 of ISO/IEC 13818-3
 */
 static
-unsigned int const nsfb_table[6][3][4] PROGMEM = {
+unsigned int const nsfb_table[6][3][4] = {
   { {  6,  5,  5, 5 },
     {  9,  9,  9, 9 },
     {  6,  9,  9, 9 }
@@ -145,46 +146,46 @@ unsigned int const nsfb_table[6][3][4] PROGMEM = {
    derived from Table B.8 of ISO/IEC 11172-3
 */
 static
-unsigned int const sfb_48000_long[] PROGMEM = {
+unsigned int const sfb_48000_long[] = {
   4,  4,  4,  4,  4,  4,  6,  6,  6,   8,  10,
   12, 16, 18, 22, 28, 34, 40, 46, 54,  54, 192
 };
 
 static
-unsigned int const sfb_44100_long[] PROGMEM = {
+unsigned int const sfb_44100_long[] = {
   4,  4,  4,  4,  4,  4,  6,  6,  8,   8,  10,
   12, 16, 20, 24, 28, 34, 42, 50, 54,  76, 158
 };
 
 static
-unsigned int const sfb_32000_long[] PROGMEM = {
+unsigned int const sfb_32000_long[] = {
   4,  4,  4,  4,  4,  4,  6,  6,  8,  10,  12,
   16, 20, 24, 30, 38, 46, 56, 68, 84, 102,  26
 };
 
 static
-unsigned int const sfb_48000_short[] PROGMEM = {
+unsigned int const sfb_48000_short[] = {
   4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  6,
   6,  6,  6,  6,  6, 10, 10, 10, 12, 12, 12, 14, 14,
   14, 16, 16, 16, 20, 20, 20, 26, 26, 26, 66, 66, 66
 };
 
 static
-unsigned int const sfb_44100_short[] PROGMEM = {
+unsigned int const sfb_44100_short[] = {
   4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  6,
   6,  6,  8,  8,  8, 10, 10, 10, 12, 12, 12, 14, 14,
   14, 18, 18, 18, 22, 22, 22, 30, 30, 30, 56, 56, 56
 };
 
 static
-unsigned int const sfb_32000_short[] PROGMEM = {
+unsigned int const sfb_32000_short[] = {
   4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  6,
   6,  6,  8,  8,  8, 12, 12, 12, 16, 16, 16, 20, 20,
   20, 26, 26, 26, 34, 34, 34, 42, 42, 42, 12, 12, 12
 };
 
 static
-unsigned int const sfb_48000_mixed[] PROGMEM = {
+unsigned int const sfb_48000_mixed[] = {
   /* long */   4,  4,  4,  4,  4,  4,  6,  6,
   /* short */  4,  4,  4,  6,  6,  6,  6,  6,  6, 10,
   10, 10, 12, 12, 12, 14, 14, 14, 16, 16,
@@ -192,7 +193,7 @@ unsigned int const sfb_48000_mixed[] PROGMEM = {
 };
 
 static
-unsigned int const sfb_44100_mixed[] PROGMEM = {
+unsigned int const sfb_44100_mixed[] = {
   /* long */   4,  4,  4,  4,  4,  4,  6,  6,
   /* short */  4,  4,  4,  6,  6,  6,  8,  8,  8, 10,
   10, 10, 12, 12, 12, 14, 14, 14, 18, 18,
@@ -200,7 +201,7 @@ unsigned int const sfb_44100_mixed[] PROGMEM = {
 };
 
 static
-unsigned int const sfb_32000_mixed[] PROGMEM = {
+unsigned int const sfb_32000_mixed[] = {
   /* long */   4,  4,  4,  4,  4,  4,  6,  6,
   /* short */  4,  4,  4,  6,  6,  6,  8,  8,  8, 12,
   12, 12, 16, 16, 16, 20, 20, 20, 26, 26,
@@ -212,13 +213,13 @@ unsigned int const sfb_32000_mixed[] PROGMEM = {
    derived from Table B.2 of ISO/IEC 13818-3
 */
 static
-unsigned int const sfb_24000_long[] PROGMEM = {
+unsigned int const sfb_24000_long[] = {
   6,  6,  6,  6,  6,  6,  8, 10, 12,  14,  16,
   18, 22, 26, 32, 38, 46, 54, 62, 70,  76,  36
 };
 
 static
-unsigned int const sfb_22050_long[] PROGMEM = {
+unsigned int const sfb_22050_long[] = {
   6,  6,  6,  6,  6,  6,  8, 10, 12,  14,  16,
   20, 24, 28, 32, 38, 46, 52, 60, 68,  58,  54
 };
@@ -226,28 +227,28 @@ unsigned int const sfb_22050_long[] PROGMEM = {
 # define sfb_16000_long  sfb_22050_long
 
 static
-unsigned int const sfb_24000_short[] PROGMEM = {
+unsigned int const sfb_24000_short[] = {
   4,  4,  4,  4,  4,  4,  4,  4,  4,  6,  6,  6,  8,
   8,  8, 10, 10, 10, 12, 12, 12, 14, 14, 14, 18, 18,
   18, 24, 24, 24, 32, 32, 32, 44, 44, 44, 12, 12, 12
 };
 
 static
-unsigned int const sfb_22050_short[] PROGMEM = {
+unsigned int const sfb_22050_short[] = {
   4,  4,  4,  4,  4,  4,  4,  4,  4,  6,  6,  6,  6,
   6,  6,  8,  8,  8, 10, 10, 10, 14, 14, 14, 18, 18,
   18, 26, 26, 26, 32, 32, 32, 42, 42, 42, 18, 18, 18
 };
 
 static
-unsigned int const sfb_16000_short[] PROGMEM = {
+unsigned int const sfb_16000_short[] = {
   4,  4,  4,  4,  4,  4,  4,  4,  4,  6,  6,  6,  8,
   8,  8, 10, 10, 10, 12, 12, 12, 14, 14, 14, 18, 18,
   18, 24, 24, 24, 30, 30, 30, 40, 40, 40, 18, 18, 18
 };
 
 static
-unsigned int const sfb_24000_mixed[] PROGMEM = {
+unsigned int const sfb_24000_mixed[] = {
   /* long */   6,  6,  6,  6,  6,  6,
   /* short */  6,  6,  6,  8,  8,  8, 10, 10, 10, 12,
   12, 12, 14, 14, 14, 18, 18, 18, 24, 24,
@@ -255,7 +256,7 @@ unsigned int const sfb_24000_mixed[] PROGMEM = {
 };
 
 static
-unsigned int const sfb_22050_mixed[] PROGMEM = {
+unsigned int const sfb_22050_mixed[] = {
   /* long */   6,  6,  6,  6,  6,  6,
   /* short */  6,  6,  6,  6,  6,  6,  8,  8,  8, 10,
   10, 10, 14, 14, 14, 18, 18, 18, 26, 26,
@@ -263,7 +264,7 @@ unsigned int const sfb_22050_mixed[] PROGMEM = {
 };
 
 static
-unsigned int const sfb_16000_mixed[] PROGMEM = {
+unsigned int const sfb_16000_mixed[] = {
   /* long */   6,  6,  6,  6,  6,  6,
   /* short */  6,  6,  6,  8,  8,  8, 10, 10, 10, 12,
   12, 12, 14, 14, 14, 18, 18, 18, 24, 24,
@@ -278,7 +279,7 @@ unsigned int const sfb_16000_mixed[] PROGMEM = {
 # define sfb_11025_long  sfb_12000_long
 
 static
-unsigned int const sfb_8000_long[] PROGMEM = {
+unsigned int const sfb_8000_long[] = {
   12, 12, 12, 12, 12, 12, 16, 20, 24,  28,  32,
   40, 48, 56, 64, 76, 90,  2,  2,  2,   2,   2
 };
@@ -287,7 +288,7 @@ unsigned int const sfb_8000_long[] PROGMEM = {
 # define sfb_11025_short  sfb_12000_short
 
 static
-unsigned int const sfb_8000_short[] PROGMEM = {
+unsigned int const sfb_8000_short[] = {
   8,  8,  8,  8,  8,  8,  8,  8,  8, 12, 12, 12, 16,
   16, 16, 20, 20, 20, 24, 24, 24, 28, 28, 28, 36, 36,
   36,  2,  2,  2,  2,  2,  2,  2,  2,  2, 26, 26, 26
@@ -299,7 +300,7 @@ unsigned int const sfb_8000_short[] PROGMEM = {
 /* the 8000 Hz short block scalefactor bands do not break after
    the first 36 frequency lines, so this is probably wrong */
 static
-unsigned int const sfb_8000_mixed[] PROGMEM = {
+unsigned int const sfb_8000_mixed[] = {
   /* long */  12, 12, 12,
   /* short */  4,  4,  4,  8,  8,  8, 12, 12, 12, 16, 16, 16,
   20, 20, 20, 24, 24, 24, 28, 28, 28, 36, 36, 36,
@@ -311,7 +312,7 @@ struct {
   unsigned int const *l;
   unsigned int const *s;
   unsigned int const *m;
-} const sfbwidth_table[9] PROGMEM = {
+} const sfbwidth_table[9] = {
   { sfb_48000_long, sfb_48000_short, sfb_48000_mixed },
   { sfb_44100_long, sfb_44100_short, sfb_44100_mixed },
   { sfb_32000_long, sfb_32000_short, sfb_32000_mixed },
@@ -328,7 +329,7 @@ struct {
    derived from Table B.6 of ISO/IEC 11172-3
 */
 static
-unsigned int const pretab[22] PROGMEM = {
+unsigned int const pretab[22] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 2, 0
 };
 
@@ -341,7 +342,7 @@ static
 struct fixedfloat {
   unsigned long mantissa  : 27;
   unsigned short exponent :  5;
-} const rq_table[8207] PROGMEM = {
+} const rq_table[8207] = {
 # include "rq_table.dat.h"
 };
 
@@ -353,7 +354,7 @@ struct fixedfloat {
 */
 static inline mad_fixed_t root_table(int i)
 {
-  static mad_fixed_t const root_table_val[7] PROGMEM = {
+  static mad_fixed_t const root_table_val[7] = {
     MAD_F(0x09837f05) /* 2^(-3/4) == 0.59460355750136 */,
     MAD_F(0x0b504f33) /* 2^(-2/4) == 0.70710678118655 */,
     MAD_F(0x0d744fcd) /* 2^(-1/4) == 0.84089641525371 */,
@@ -375,7 +376,7 @@ static inline mad_fixed_t root_table(int i)
 */
 static inline mad_fixed_t cs(int i)
 {
-  static mad_fixed_t const cs_val[8] PROGMEM = {
+  static mad_fixed_t const cs_val[8] = {
     +MAD_F(0x0db84a81) /* +0.857492926 */, +MAD_F(0x0e1b9d7f) /* +0.881741997 */,
     +MAD_F(0x0f31adcf) /* +0.949628649 */, +MAD_F(0x0fbba815) /* +0.983314592 */,
     +MAD_F(0x0feda417) /* +0.995517816 */, +MAD_F(0x0ffc8fc8) /* +0.999160558 */,
@@ -387,7 +388,7 @@ static inline mad_fixed_t cs(int i)
 
 static inline mad_fixed_t ca(int i)
 {
-  static mad_fixed_t const ca_val[8] PROGMEM = {
+  static mad_fixed_t const ca_val[8] = {
     -MAD_F(0x083b5fe7) /* -0.514495755 */, -MAD_F(0x078c36d2) /* -0.471731969 */,
     -MAD_F(0x05039814) /* -0.313377454 */, -MAD_F(0x02e91dd1) /* -0.181913200 */,
     -MAD_F(0x0183603a) /* -0.094574193 */, -MAD_F(0x00a7cb87) /* -0.040965583 */,
@@ -405,7 +406,7 @@ static inline mad_fixed_t ca(int i)
    imdct_s[i /odd][k] = cos((PI / 24) * (2 * (6 + (i-1)/2) + 7) * (2 * k + 1))
 */
 static
-mad_fixed_t const imdct_s[6][6] PROGMEM  = {
+mad_fixed_t const imdct_s[6][6]  = {
 # include "imdct_s.dat.h"
 };
 
@@ -418,7 +419,7 @@ mad_fixed_t const imdct_s[6][6] PROGMEM  = {
 */
 static inline mad_fixed_t window_l(int i)
 {
-  static mad_fixed_t const window_l_val[36] PROGMEM = {
+  static mad_fixed_t const window_l_val[36] = {
     MAD_F(0x00b2aa3e) /* 0.043619387 */, MAD_F(0x0216a2a2) /* 0.130526192 */,
     MAD_F(0x03768962) /* 0.216439614 */, MAD_F(0x04cfb0e2) /* 0.300705800 */,
     MAD_F(0x061f78aa) /* 0.382683432 */, MAD_F(0x07635284) /* 0.461748613 */,
@@ -453,7 +454,7 @@ static inline mad_fixed_t window_l(int i)
 */
 static inline mad_fixed_t window_s(int i)
 {
-  static mad_fixed_t const window_s_val[12] PROGMEM = {
+  static mad_fixed_t const window_s_val[12] = {
     MAD_F(0x0216a2a2) /* 0.130526192 */, MAD_F(0x061f78aa) /* 0.382683432 */,
     MAD_F(0x09bd7ca0) /* 0.608761429 */, MAD_F(0x0cb19346) /* 0.793353340 */,
     MAD_F(0x0ec835e8) /* 0.923879533 */, MAD_F(0x0fdcf549) /* 0.991444861 */,
@@ -474,7 +475,7 @@ static inline mad_fixed_t window_s(int i)
 */
 static inline mad_fixed_t is_table(int i)
 {
-  static mad_fixed_t const is_table_val[7] PROGMEM = {
+  static mad_fixed_t const is_table_val[7] = {
     MAD_F(0x00000000) /* 0.000000000 */,
     MAD_F(0x0361962f) /* 0.211324865 */,
     MAD_F(0x05db3d74) /* 0.366025404 */,
@@ -495,7 +496,7 @@ static inline mad_fixed_t is_table(int i)
    is_lsf_table[1][i] = (1 /      sqrt(2)) ^(i + 1)
 */
 static
-mad_fixed_t const is_lsf_table[2][15] PROGMEM = {
+mad_fixed_t const is_lsf_table[2][15] = {
   {
     MAD_F(0x0d744fcd) /* 0.840896415 */,
     MAD_F(0x0b504f33) /* 0.707106781 */,
@@ -1711,7 +1712,7 @@ void sdctII(mad_fixed_t const x[18], mad_fixed_t X[18])
   stack(__FUNCTION__, __FILE__, __LINE__);
 
   /* scale[i] = 2 * cos(PI * (2 * i + 1) / (2 * 18)) */
-  static mad_fixed_t const scale[9] PROGMEM = {
+  static mad_fixed_t const scale[9] = {
     MAD_F(0x1fe0d3b4), MAD_F(0x1ee8dd47), MAD_F(0x1d007930),
     MAD_F(0x1a367e59), MAD_F(0x16a09e66), MAD_F(0x125abcf8),
     MAD_F(0x0d8616bc), MAD_F(0x08483ee1), MAD_F(0x02c9fad7)
@@ -1758,7 +1759,7 @@ void dctIV(mad_fixed_t const y[18], mad_fixed_t X[18])
   stack(__FUNCTION__, __FILE__, __LINE__);
 
   /* scale[i] = 2 * cos(PI * (2 * i + 1) / (4 * 18)) */
-  static mad_fixed_t const scale[18] PROGMEM = {
+  static mad_fixed_t const scale[18] = {
     MAD_F(0x1ff833fa), MAD_F(0x1fb9ea93), MAD_F(0x1f3dd120),
     MAD_F(0x1e84d969), MAD_F(0x1d906bcf), MAD_F(0x1c62648b),
     MAD_F(0x1afd100f), MAD_F(0x1963268b), MAD_F(0x1797c6a4),
@@ -2218,9 +2219,9 @@ void III_imdct_s(mad_fixed_t const X[18], mad_fixed_t z[36])
   int w, i;
   register mad_fixed64hi_t hi;
   register mad_fixed64lo_t lo;
-  // MAD_F_MLA may produce non-32b aligned reads, so copy from progmem to stack and work from there...
+  // MAD_F_MLA may produce non-32b aligned reads, so copy from to stack and work from there...
   mad_fixed_t imdct_s_lcl[6][6];
-  memcpy_P(imdct_s_lcl, imdct_s, sizeof(imdct_s));
+  memcpy(imdct_s_lcl, imdct_s, sizeof(imdct_s));
   stack(__FUNCTION__, __FILE__, __LINE__);
 
   /* IMDCT */

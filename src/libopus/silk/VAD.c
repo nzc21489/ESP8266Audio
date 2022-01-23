@@ -28,7 +28,7 @@ POSSIBILITY OF SUCH DAMAGE.
 //#ifdef HAVE_CONFIG_H
 #include "../config.h"
 //#endif
-#include  <pgmspace.h>
+// #include  <pgmspace.h>
 
 #include "main.h"
 #include "../celt/stack_alloc.h"
@@ -75,7 +75,7 @@ opus_int silk_VAD_Init(                                         /* O    Return v
 }
 
 /* Weighting factors for tilt measure */
-static const opus_int32 tiltWeights[ VAD_N_BANDS ] PROGMEM = { 30000, 6000, -12000, -12000 };
+static const opus_int32 tiltWeights[ VAD_N_BANDS ] = { 30000, 6000, -12000, -12000 };
 
 /***************************************/
 /* Get the speech activity level in Q8 */

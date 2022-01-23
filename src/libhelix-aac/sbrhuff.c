@@ -119,7 +119,7 @@ static int DecodeOneSymbol(BitStreamInfo *bsi, int huffTabIndex)
 }
 
 /* [1.0, sqrt(2)], format = Q29 (one guard bit for decoupling) */
-static const int envDQTab[2] PROGMEM = {0x20000000, 0x2d413ccc};
+static const int envDQTab[2] = {0x20000000, 0x2d413ccc};
 
 /**************************************************************************************
  * Function:    DequantizeEnvelope
@@ -393,7 +393,7 @@ void DecodeSBRNoise(BitStreamInfo *bsi, PSInfoSBR *psi, SBRGrid *sbrGrid, SBRFre
 }
 
 /* dqTabCouple[i] = 2 / (1 + 2^(12 - i)), format = Q30 */
-static const int dqTabCouple[25] PROGMEM = {
+static const int dqTabCouple[25] = {
 	0x0007ff80, 0x000ffe00, 0x001ff802, 0x003fe010, 0x007f8080, 0x00fe03f8, 0x01f81f82, 0x03e0f83e, 
 	0x07878788, 0x0e38e38e, 0x1999999a, 0x2aaaaaab, 0x40000000, 0x55555555, 0x66666666, 0x71c71c72, 
 	0x78787878, 0x7c1f07c2, 0x7e07e07e, 0x7f01fc08, 0x7f807f80, 0x7fc01ff0, 0x7fe007fe, 0x7ff00200, 

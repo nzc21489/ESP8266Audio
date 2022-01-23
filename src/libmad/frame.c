@@ -21,7 +21,7 @@
 
 #pragma GCC optimize ("O3")
 
-#include <pgmspace.h>
+// #include <pgmspace.h>
 #  include "config.h"
 
 # include "global.h"
@@ -35,7 +35,7 @@
 # include "layer3.h"
 
 static
-unsigned long const bitrate_table[5][15] PROGMEM = {
+unsigned long const bitrate_table[5][15] = {
   /* MPEG-1 */
   { 0,  32000,  64000,  96000, 128000, 160000, 192000, 224000,  /* Layer I   */
        256000, 288000, 320000, 352000, 384000, 416000, 448000 },
@@ -52,7 +52,7 @@ unsigned long const bitrate_table[5][15] PROGMEM = {
 };
 
 static
-unsigned int const samplerate_table[3] PROGMEM = { 44100, 48000, 32000 };
+unsigned int const samplerate_table[3] = { 44100, 48000, 32000 };
 
 static
 int (*const decoder_table[3])(struct mad_stream *, struct mad_frame *) = {

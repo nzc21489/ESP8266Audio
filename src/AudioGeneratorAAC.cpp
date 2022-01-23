@@ -21,6 +21,8 @@
 #pragma GCC optimize ("O3")
 
 #include "AudioGeneratorAAC.h"
+#include <cstdlib>
+#include <cstring>
 
 AudioGeneratorAAC::AudioGeneratorAAC()
 {
@@ -34,14 +36,14 @@ AudioGeneratorAAC::AudioGeneratorAAC()
   buff = (uint8_t*)malloc(buffLen);
   outSample = (int16_t*)malloc(1024 * 2 * sizeof(uint16_t));
   if (!buff || !outSample) {
-    audioLogger->printf_P(PSTR("ERROR: Out of memory in AAC\n"));
-    Serial.flush();
+//     audioLogger->printf_P(PSTR("ERROR: Out of memory in AAC\n"));
+//     Serial.flush();
   }
 
   hAACDecoder = AACInitDecoder();
   if (!hAACDecoder) {
-    audioLogger->printf_P(PSTR("Out of memory error! hAACDecoder==NULL\n"));
-    Serial.flush();
+//     audioLogger->printf_P(PSTR("Out of memory error! hAACDecoder==NULL\n"));
+//     Serial.flush();
   }
 
   buffValid = 0;
@@ -69,13 +71,13 @@ AudioGeneratorAAC::AudioGeneratorAAC(void *preallocateData, int preallocateSz)
   int used = p - (uint8_t*)preallocateSpace;
   int availSpace = preallocateSize - used;
   if (availSpace < 0 ) {
-    audioLogger->printf_P(PSTR("ERROR: Out of memory in AAC\n"));
+//     audioLogger->printf_P(PSTR("ERROR: Out of memory in AAC\n"));
   }
 
   hAACDecoder = AACInitDecoderPre(p, availSpace);
   if (!hAACDecoder) {
-    audioLogger->printf_P(PSTR("Out of memory error! hAACDecoder==NULL\n"));
-    Serial.flush();
+//     audioLogger->printf_P(PSTR("Out of memory error! hAACDecoder==NULL\n"));
+//     Serial.flush();
   }
   buffValid = 0;
   lastFrameEnd = 0;
@@ -165,7 +167,7 @@ bool AudioGeneratorAAC::loop()
     if (ret) {
       // Error, skip the frame...
       char buff[48];
-      sprintf_P(buff, PSTR("AAC decode error %d"), ret);
+//       sprintf_P(buff, PSTR("AAC decode error %d"), ret);
       cb.st(ret, buff);
     } else {
       lastFrameEnd = buffValid - bytesLeft;

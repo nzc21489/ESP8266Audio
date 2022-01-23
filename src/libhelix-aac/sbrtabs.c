@@ -83,7 +83,7 @@ const unsigned char goalSBTab[NUM_SAMPLE_RATES_SBR] = {
 	21, 23, 32, 43, 46, 64, 85, 93, 128
 };
 
-const HuffInfo huffTabSBRInfo[10] PROGMEM = {
+const HuffInfo huffTabSBRInfo[10] = {
 	{19, { 0,  2,  2,  2,  2,  2,  2,  2,  2,  2,  1,  2,  3,  4,  2,  7,  4,  8, 72,  0},   0},
 	{20, { 0,  2,  2,  2,  2,  2,  1,  3,  3,  2,  4,  4,  4,  3,  2,  5,  6, 13, 15, 46}, 121},
 	{17, { 1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  2,  2,  0,  0,  1, 25, 10,  0,  0,  0}, 242},
@@ -97,7 +97,7 @@ const HuffInfo huffTabSBRInfo[10] PROGMEM = {
 };
 
 /* Huffman tables from appendix 4.A.6.1, includes offset of -LAV[i] for table i */
-const signed int /*short*/ huffTabSBR[604] PROGMEM = {
+const signed int /*short*/ huffTabSBR[604] = {
 	    /* SBR table sbr_tenv15 [121] (signed) */
 	   0,   -1,    1,   -2,    2,   -3,    3,   -4,    4,   -5,    5,   -6,    6,   -7,    7,   -8, 
 	  -9,    8,  -10,    9,  -11,   10,  -12,  -13,   11,  -14,   12,  -15,  -16,   13,  -19,  -18, 
@@ -153,7 +153,7 @@ const signed int /*short*/ huffTabSBR[604] PROGMEM = {
 };
 
 /* log2Tab[x] = floor(log2(x)), format = Q28 */
-const int log2Tab[65] PROGMEM = {
+const int log2Tab[65] = {
 	0x00000000, 0x00000000, 0x10000000, 0x195c01a3, 0x20000000, 0x25269e12, 0x295c01a3, 0x2ceaecfe, 
 	0x30000000, 0x32b80347, 0x35269e12, 0x3759d4f8, 0x395c01a3, 0x3b350047, 0x3ceaecfe, 0x3e829fb6, 
 	0x40000000, 0x41663f6f, 0x42b80347, 0x43f782d7, 0x45269e12, 0x4646eea2, 0x4759d4f8, 0x48608280, 
@@ -175,7 +175,7 @@ const int log2Tab[65] PROGMEM = {
  * NOTE: cTab[1, 2, ... , 318, 319] = cTab[639, 638, ... 322, 321] 
  *   except cTab[384] = -cTab[256], cTab[512] = -cTab[128]
  */
-const int cTabA[165] PROGMEM = {
+const int cTabA[165] = {
 	0x00000000, 0x0055dba1, 0x01b2e41d, 0x09015651, 0x2e3a7532, 0xffed978a, 0x006090c4, 0x01fd3ba0, 0x08a24899, 0x311af3a4, 
 	0xfff0065d, 0x006b47fa, 0x024bf7a1, 0x082f552e, 0x33ff670e, 0xffef7b8b, 0x0075fded, 0x029e35b4, 0x07a8127d, 0x36e69691, 
 	0xffee1650, 0x00807994, 0x02f3e48d, 0x070bbf58, 0x39ce0477, 0xffecc31b, 0x008a7dd7, 0x034d01f0, 0x06593912, 0x3cb41219, 
@@ -200,7 +200,7 @@ const int cTabA[165] PROGMEM = {
  * keeping full table (not using symmetry) to allow sequential access in synth filter inner loop
  * format = Q31
  */
-const int cTabS[640] PROGMEM = {
+const int cTabS[640] = {
 	0x00000000, 0x0055dba1, 0x01b2e41d, 0x09015651, 0x2e3a7532, 0x6d474e1d, 0xd1c58ace, 0x09015651, 0xfe4d1be3, 0x0055dba1, 
 	0xffede50e, 0x005b5371, 0x01d78bfc, 0x08d3e41b, 0x2faa221c, 0x6d41d963, 0xd3337b3d, 0x09299ead, 0xfe70b8d1, 0x0050b177, 
 	0xffed978a, 0x006090c4, 0x01fd3ba0, 0x08a24899, 0x311af3a4, 0x6d32730f, 0xd49fd55f, 0x094d7ec2, 0xfe933dc0, 0x004b6c46, 
@@ -268,7 +268,7 @@ const int cTabS[640] PROGMEM = {
 };
 
 /* noise table 4.A.88, format = Q31 */
-const int noiseTab[512*2] PROGMEM = {
+const int noiseTab[512*2] = {
 	0x8010fd38, 0xb3dc7948, 0x7c4e2301, 0xa9904192, 0x121622a7, 0x86489625, 0xc3d53d25, 0xd0343fa9, 
 	0x674d6f70, 0x25f4e9fd, 0xce1a8c8b, 0x72a726c5, 0xfea6efc6, 0xaa4adb1a, 0x8b2dd628, 0xf14029e4, 
 	0x46321c1a, 0x604889a0, 0x33363b63, 0x815ed069, 0x802b4315, 0x8f2bf7f3, 0x85b86073, 0x745cfb46, 

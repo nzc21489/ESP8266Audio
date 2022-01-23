@@ -21,8 +21,8 @@
 #ifndef _AUDIOFILESOURCEID3_H
 #define _AUDIOFILESOURCEID3_H
 
-#include <Arduino.h>
-
+#include "pico/stdlib.h"
+#include <stdio.h>
 #include "AudioFileSource.h"
 
 class AudioFileSourceID3 : public AudioFileSource

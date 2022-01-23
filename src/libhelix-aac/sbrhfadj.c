@@ -47,7 +47,7 @@
 #include "assembly.h"
 
 /* invBandTab[i] = 1.0 / (i + 1), Q31 */
-static const int invBandTab[64] PROGMEM = {
+static const int invBandTab[64] = {
 	0x7fffffff, 0x40000000, 0x2aaaaaab, 0x20000000, 0x1999999a, 0x15555555, 0x12492492, 0x10000000, 
 	0x0e38e38e, 0x0ccccccd, 0x0ba2e8ba, 0x0aaaaaab, 0x09d89d8a, 0x09249249, 0x08888889, 0x08000000, 
 	0x07878788, 0x071c71c7, 0x06bca1af, 0x06666666, 0x06186186, 0x05d1745d, 0x0590b216, 0x05555555, 
@@ -217,7 +217,7 @@ static int GetSMapped(SBRGrid *sbrGrid, SBRFreq *sbrFreq, SBRChan *sbrChan, int 
 #define	ACC_SCALE	6
 
 /* squared version of table in 4.6.18.7.5 */
-static const int limGainTab[4] PROGMEM = {0x20138ca7, 0x40000000, 0x7fb27dce, 0x80000000};	/* Q30 (0x80000000 = sentinel for GMAX) */
+static const int limGainTab[4] = {0x20138ca7, 0x40000000, 0x7fb27dce, 0x80000000};	/* Q30 (0x80000000 = sentinel for GMAX) */
 
 /**************************************************************************************
  * Function:    CalcMaxGain
@@ -622,7 +622,7 @@ static void CalcGain(PSInfoSBR *psi, SBRHeader *sbrHdr, SBRGrid *sbrGrid, SBRFre
 }
 
 /* hSmooth table from 4.7.18.7.6, format = Q31 */
-static const int hSmoothCoef[MAX_NUM_SMOOTH_COEFS] PROGMEM = {
+static const int hSmoothCoef[MAX_NUM_SMOOTH_COEFS] = {
 	0x2aaaaaab, 0x2697a512, 0x1becfa68, 0x0ebdb043, 0x04130598, 
 };
 

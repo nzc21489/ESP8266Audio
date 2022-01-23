@@ -186,10 +186,10 @@ static int CalcFreqMasterScaleZero(unsigned char *freqMaster, int alterScale, in
 }
 
 /* mBandTab[i] = temp1[i] / 2 */
-static const int mBandTab[3] PROGMEM = {6, 5, 4};
+static const int mBandTab[3] = {6, 5, 4};
 
 /* invWarpTab[i] = 1.0 / temp2[i], Q30 (see 4.6.18.3.2.1) */
-static const int invWarpTab[2] PROGMEM = {0x40000000, 0x313b13b1};
+static const int invWarpTab[2] = {0x40000000, 0x313b13b1};
 
 /**************************************************************************************
  * Function:    CalcFreqMasterScale

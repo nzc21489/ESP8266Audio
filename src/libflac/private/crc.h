@@ -35,7 +35,7 @@
 
 #define PGM_READ_UNALIGNED 0
 
-#include <pgmspace.h>
+// #include <pgmspace.h>
 
 #include "../FLAC/ordinals.h"
 
@@ -44,7 +44,7 @@
 ** init = 0
 */
 extern FLAC__byte const FLAC__crc8_table[256];
-#define FLAC__CRC8_UPDATE(data, crc) (crc) = pgm_read_byte(&FLAC__crc8_table[(crc) ^ (data)]);
+#define FLAC__CRC8_UPDATE(data, crc) (crc) = FLAC__crc8_table[(crc) ^ (data)];
 void FLAC__crc8_update(const FLAC__byte data, FLAC__uint8 *crc);
 void FLAC__crc8_update_block(const FLAC__byte *data, unsigned len, FLAC__uint8 *crc);
 FLAC__uint8 FLAC__crc8(const FLAC__byte *data, unsigned len);
@@ -55,7 +55,7 @@ FLAC__uint8 FLAC__crc8(const FLAC__byte *data, unsigned len);
 */
 extern unsigned const FLAC__crc16_table[256];
 
-#define FLAC__CRC16_UPDATE(data, crc) ((((crc)<<8) & 0xffff) ^ pgm_read_word(&FLAC__crc16_table[((crc)>>8) ^ (data)]))
+#define FLAC__CRC16_UPDATE(data, crc) ((((crc)<<8) & 0xffff) ^ FLAC__crc16_table[((crc)>>8) ^ (data)])
 /* this alternate may be faster on some systems/compilers */
 #if 0
 #define FLAC__CRC16_UPDATE(data, crc) ((((crc)<<8) ^ FLAC__crc16_table[((crc)>>8) ^ (data)]) & 0xffff)

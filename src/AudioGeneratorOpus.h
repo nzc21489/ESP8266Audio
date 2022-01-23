@@ -25,6 +25,8 @@
 //#include "libopus/opus.h"
 #include "opusfile/opusfile.h"
 
+#include <cstdlib>
+
 class AudioGeneratorOpus : public AudioGenerator
 {
   public:

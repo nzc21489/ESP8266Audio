@@ -57,6 +57,7 @@
 /* toolchain:           MSFT Visual C++
  * target architecture: x86
  */
+
 #if (defined (_WIN32) && !defined (_WIN32_WCE)) || (defined (__WINS__) && defined (_SYMBIAN)) || (defined (WINCE_EMULATOR)) || (defined (_OPENWAVE_SIMULATOR))
 
 #pragma warning( disable : 4035 )	/* complains about inline asm not returning a value */
@@ -337,19 +338,22 @@ static __inline Word64 MADD64(Word64 sum64, int x, int y)
  * target architecture: ARM v.4 and above (requires 'M' type processor for 32x32->64 multiplier)
  */
 #elif defined(__GNUC__) && defined(__arm__)
+typedef long long Word64;
 
-static inline int MULSHIFT32(int x, int y)
+static __inline__ int MULSHIFT32(int x, int y)
 {
-    int zlow;
-    asm ("smull %0,%1,%2,%3" : "=&r" (zlow), "=r" (y) : "r" (x), "1" (y) : "cc");
-    return y;
+    int z;
+
+    z = (Word64)x * (Word64)y >> 32;
+    
+	return z;
 }
 /*
 static inline short CLIPTOSHORT(int x) 
 {
 	int sign;
 
-	// clip to [-32768, 32767] //
+	clip to [-32768, 32767] //
 	sign = x >> 31;
 	if (sign != (x >> 15))
 		x = sign ^ ((1 << 15) - 1);
@@ -357,15 +361,27 @@ static inline short CLIPTOSHORT(int x)
 	return (short)x;
 }
 */	
-static inline short CLIPTOSHORT(int x) 
+// static inline short CLIPTOSHORT(int x) 
+// {
+// 	asm ("ssat %0, #16, %1" : "=r" (x) : "r" (x));
+// 	return x;
+// }
+
+static __inline short CLIPTOSHORT(int x)
 {
-	asm ("ssat %0, #16, %1" : "=r" (x) : "r" (x));
-	return x;
+	int sign;
+
+	/* clip to [-32768, 32767] */
+	sign = x >> 31;
+	if (sign != (x >> 15))
+		x = sign ^ ((1 << 15) - 1);
+
+	return (short)x;
 }
 
 /* From coder.h, ORIGINAL:
 clip to [-2^n, 2^n-1], valid range of n = [1, 30]
-//TODO (FB) Is there a better way ?
+TODO (FB) Is there a better way ?
 */
 #define CLIP_2N(y, n) { \
 	int sign = (y) >> 31;  \
@@ -377,7 +393,7 @@ clip to [-2^n, 2^n-1], valid range of n = [1, 30]
 /* From coder.h, ORIGINAL:
  do y <<= n, clipping to range [-2^30, 2^30 - 1] (i.e. output has one guard bit) 
 */
-//TODO (FB) Is there a better way ?
+// TODO (FB) Is there a better way ?
 #define CLIP_2N_SHIFT(y, n) {                   \
         int sign = (y) >> 31;                   \
         if (sign != (y) >> (30 - (n)))  {       \
@@ -388,18 +404,28 @@ clip to [-2^n, 2^n-1], valid range of n = [1, 30]
     }
 
 
+static __inline int FASTABS(int x) 
+{
+	int sign;
 
-#define FASTABS(x) abs(x) //FB
+	sign = x >> (sizeof(int) * 8 - 1);
+	x ^= sign;
+	x -= sign;
+
+	return x;
+}
+
+// #define FASTABS(x) abs(x) //FB
 #define CLZ(x) __builtin_clz(x) //FB
 
-//Reverse byte order (16 bit) //FB
+// Reverse byte order (16 bit) //FB
 static inline unsigned int REV16( unsigned int value)
 {
 	asm ("rev16 %0, %1" : "=r" (value) : "r" (value) );
 	return(value);
 }
 
-//Reverse byte order (32 bit) //FB
+// Reverse byte order (32 bit) //FB
 static inline unsigned int REV32( unsigned int value)
 {
 	asm ("rev %0, %1" : "=r" (value) : "r" (value) );
@@ -418,12 +444,19 @@ typedef union _U64 {
 	} r;
 } U64;
 
-static inline Word64 MADD64(Word64 sum64, int x, int y)
+// static inline Word64 MADD64(Word64 sum64, int x, int y)
+// {
+// 	U64 u;
+// 	u.w64 = sum64;
+// 	asm ("smlal %0,%1,%2,%3" : "+&r" (u.r.lo32), "+&r" (u.r.hi32) : "r" (x), "r" (y) : "cc");
+// 	return u.w64;
+// }
+
+static __inline Word64 MADD64(Word64 sum64, int x, int y)
 {
-	U64 u;
-	u.w64 = sum64;
-	asm ("smlal %0,%1,%2,%3" : "+&r" (u.r.lo32), "+&r" (u.r.hi32) : "r" (x), "r" (y) : "cc");
-	return u.w64;
+	sum64 += (Word64)x * (Word64)y;
+
+	return sum64;
 }
 
 /* toolchain:           x86 gcc

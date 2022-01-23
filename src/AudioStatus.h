@@ -21,7 +21,8 @@
 #ifndef _AUDIOSTATUS_H
 #define _AUDIOSTATUS_H
 
-#include <Arduino.h>
+#include "pico/stdlib.h"
+#include <stdio.h>
 
 #include "AudioLogger.h"
 

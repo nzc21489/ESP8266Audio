@@ -18,6 +18,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma GCC optimize("O2")
 #include "AudioFileSourceSD.h"
 
 AudioFileSourceSD::AudioFileSourceSD()
@@ -31,48 +32,54 @@ AudioFileSourceSD::AudioFileSourceSD(const char *filename)
 
 bool AudioFileSourceSD::open(const char *filename)
 {
-  f = SD.open(filename, FILE_READ);
-  return f;
+  res = f_open(&f, filename, FA_OPEN_EXISTING | FA_READ);
+  if (res == FR_OK){
+      return true;
+  }else{
+      return false;
+  }
 }
 
 AudioFileSourceSD::~AudioFileSourceSD()
 {
-  if (f) f.close();
+  if (res == FR_OK) f_close(&f);
 }
 
 uint32_t AudioFileSourceSD::read(void *data, uint32_t len)
 {
-  return f.read(reinterpret_cast<uint8_t*>(data), len);
+  UINT byte_read;
+  res = f_read(&f, data, len, &byte_read);
+  return (uint32_t) byte_read;
 }
 
 bool AudioFileSourceSD::seek(int32_t pos, int dir)
 {
-  if (!f) return false;
-  if (dir==SEEK_SET) return f.seek(pos);
-  else if (dir==SEEK_CUR) return f.seek(f.position() + pos);
-  else if (dir==SEEK_END) return f.seek(f.size() + pos);
+  if (res != FR_OK) return false;
+  if (dir==SEEK_SET) return f_lseek(&f, pos)?false:true;
+  else if (dir==SEEK_CUR) return f_lseek(&f, (f_tell(&f) + pos))?false:true;
+  else if (dir==SEEK_END) return f_lseek(&f, (f_size(&f) + pos))?false:true;
   return false;
 }
 
 bool AudioFileSourceSD::close()
 {
-  f.close();
+  f_close(&f);
   return true;
 }
 
 bool AudioFileSourceSD::isOpen()
 {
-  return f?true:false;
+  return res?false:true;
 }
 
 uint32_t AudioFileSourceSD::getSize()
 {
-  if (!f) return 0;
-  return f.size();
+  if (res != FR_OK) return 0;
+  return (uint32_t)f_size(&f);
 }
 
 uint32_t AudioFileSourceSD::getPos()
 {
-  if (!f) return 0;
-  return f.position();
+  if (res != FR_OK) return 0;
+  return (uint32_t)f_tell(&f);
 }

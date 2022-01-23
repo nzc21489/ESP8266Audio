@@ -101,7 +101,7 @@ int InvRNormalized(int r)
 #define LOG2_EXP_INV	0x58b90bfc	/* 1/log2(e), Q31 */
 
 /* invTab[x] = 1/(x+1), format = Q30 */
-static const int invTab[NUM_TERMS_RPI] PROGMEM = {0x40000000, 0x20000000, 0x15555555, 0x10000000, 0x0ccccccd};
+static const int invTab[NUM_TERMS_RPI] = {0x40000000, 0x20000000, 0x15555555, 0x10000000, 0x0ccccccd};
 
 /**************************************************************************************
  * Function:    RatioPowInv

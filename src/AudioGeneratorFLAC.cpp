@@ -18,7 +18,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma GCC optimize ("O2")
 #include <AudioGeneratorFLAC.h>
+#include <cstring>
 
 AudioGeneratorFLAC::AudioGeneratorFLAC()
 {
@@ -103,9 +105,15 @@ bool AudioGeneratorFLAC::loop()
       if (channels==2) lastSample[AudioOutput::RIGHTCHANNEL] = buff[1][buffPtr] & 0xffff; 
       else lastSample[AudioOutput::RIGHTCHANNEL] = lastSample[AudioOutput::LEFTCHANNEL];
     } else if (bitsPerSample <= 24) {
-      lastSample[AudioOutput::LEFTCHANNEL] = (buff[0][buffPtr]>>8) & 0xffff; 
-      if (channels==2) lastSample[AudioOutput::RIGHTCHANNEL] = (buff[1][buffPtr]>>8) & 0xffff; 
-      else lastSample[AudioOutput::RIGHTCHANNEL] = lastSample[AudioOutput::LEFTCHANNEL];
+      lastSample[AudioOutput::LEFTCHANNEL] = (buff[1][buffPtr]) & 0xffff;
+      lastSample[AudioOutput::RIGHTCHANNEL] = (buff[1][buffPtr]>>8);
+      if (!output->ConsumeSample(lastSample)){
+        lastSample[AudioOutput::LEFTCHANNEL] = (buff[0][buffPtr]) & 0xffff; 
+        lastSample[AudioOutput::RIGHTCHANNEL] = (buff[0][buffPtr]>>8);
+        break;
+      }
+      lastSample[AudioOutput::LEFTCHANNEL] = (buff[0][buffPtr]) & 0xffff; 
+      lastSample[AudioOutput::RIGHTCHANNEL] = (buff[0][buffPtr]>>8);
     } else {
       lastSample[AudioOutput::LEFTCHANNEL] = (buff[0][buffPtr]>>16) & 0xffff; 
       if (channels==2) lastSample[AudioOutput::RIGHTCHANNEL] = (buff[1][buffPtr]>>16) & 0xffff; 
@@ -187,13 +195,14 @@ void AudioGeneratorFLAC::metadata_cb(const FLAC__StreamDecoder *decoder, const F
 {
   (void) decoder;
   (void) metadata;
-  audioLogger->printf_P(PSTR("Metadata\n"));
+//   audioLogger->printf_P(PSTR("Metadata\n"));
 }
 char AudioGeneratorFLAC::error_cb_str[64];
 void AudioGeneratorFLAC::error_cb(const FLAC__StreamDecoder *decoder, FLAC__StreamDecoderErrorStatus status)
 {
   (void) decoder;
-  strncpy_P(error_cb_str, FLAC__StreamDecoderErrorStatusString[status], 64);
+//   strncpy_P(error_cb_str, FLAC__StreamDecoderErrorStatusString[status], 64);
+  strncpy(error_cb_str, FLAC__StreamDecoderErrorStatusString[status], 64);
   cb.st((int)status, error_cb_str);
 }
 

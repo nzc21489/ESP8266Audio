@@ -33,8 +33,8 @@
 //#ifdef HAVE_CONFIG_H
 #  include "config.h"
 //#endif
-#include <Arduino.h>
-#include <pgmspace.h>
+// #include <Arduino.h>
+// #include <pgmspace.h>
 
 //#include <stdio.h>
 #include <stdlib.h> /* for malloc() */
@@ -56,7 +56,7 @@
 #include "private/memory.h"
 #include "private/macros.h"
 
-#pragma GCC optimize ("O3")
+#pragma GCC optimize ("O2")
 
 /* technically this should be in an "export.c" but this is convenient enough */
 FLAC_API int FLAC_API_SUPPORTS_OGG_FLAC = FLAC__HAS_OGG;

@@ -20,6 +20,8 @@
 
 
 #include "AudioGeneratorMP3.h"
+#include <cstdlib>
+#include <string.h>
 
 AudioGeneratorMP3::AudioGeneratorMP3()
 {
@@ -105,10 +107,10 @@ enum mad_flow AudioGeneratorMP3::ErrorToFlow()
   // Special case - eat "lost sync @ byte 0" as it always occurs and is not really correct....it never had sync!
   if ((lastReadPos==0) && (stream->error==MAD_ERROR_LOSTSYNC)) return MAD_FLOW_CONTINUE;
 
-  strcpy_P(err, mad_stream_errorstr(stream));
-  snprintf_P(errLine, sizeof(errLine), PSTR("Decoding error '%s' at byte offset %d"),
-           err, (stream->this_frame - buff) + lastReadPos);
-  yield(); // Something bad happened anyway, ensure WiFi gets some time, too
+  strcpy(err, mad_stream_errorstr(stream));
+//   snprintf_P(errLine, sizeof(errLine), PSTR("Decoding error '%s' at byte offset %d"),
+//            err, (stream->this_frame - buff) + lastReadPos);
+//   yield(); // Something bad happened anyway, ensure WiFi gets some time, too
   cb.st(stream->error, errLine);
   return MAD_FLOW_CONTINUE;
 }
@@ -153,7 +155,7 @@ enum mad_flow AudioGeneratorMP3::Input()
 
 void AudioGeneratorMP3::desync ()
 {
-    audioLogger->printf_P(PSTR("MP3:desync\n"));
+//     audioLogger->printf_P(PSTR("MP3:desync\n"));
     if (stream) {
         stream->next_frame = nullptr;
         stream->this_frame = nullptr;
@@ -193,7 +195,7 @@ bool AudioGeneratorMP3::GetOneSample(int16_t sample[2])
     
     switch ( mad_synth_frame_onens(synth, frame, nsCount++) ) {
         case MAD_FLOW_STOP:
-        case MAD_FLOW_BREAK: audioLogger->printf_P(PSTR("msf1ns failed\n"));
+        case MAD_FLOW_BREAK: /*audioLogger->printf_P(PSTR("msf1ns failed\n"));*/
           return false; // Either way we're done
         default:
           break; // Do nothing
@@ -228,7 +230,7 @@ retry:
         if (stream->error == MAD_ERROR_BUFLEN) {
           // randomly seeking can lead to endless
           // and unrecoverable "MAD_ERROR_BUFLEN" loop
-          audioLogger->printf_P(PSTR("MP3:ERROR_BUFLEN %d\n"), unrecoverable);
+//           audioLogger->printf_P(PSTR("MP3:ERROR_BUFLEN %d\n"), unrecoverable);
           if (++unrecoverable >= 3) {
             unrecoverable = 0;
             stop();
@@ -244,7 +246,7 @@ retry:
     }
 
     if (!GetOneSample(lastSample)) {
-      audioLogger->printf_P(PSTR("G1S failed\n"));
+//       audioLogger->printf_P(PSTR("G1S failed\n"));
       running = false;
       goto done;
     }
@@ -266,7 +268,7 @@ bool AudioGeneratorMP3::begin(AudioFileSource *source, AudioOutput *output)
   if (!output) return false;
   this->output = output;
   if (!file->isOpen()) {
-    audioLogger->printf_P(PSTR("MP3 source file not open\n"));
+//     audioLogger->printf_P(PSTR("MP3 source file not open\n"));
     return false; // Error
   }
 
@@ -298,9 +300,9 @@ bool AudioGeneratorMP3::begin(AudioFileSource *source, AudioOutput *output)
       synth = reinterpret_cast<struct mad_synth *>(preallocateSynthSpace);
     }
     else {
-      audioLogger->printf_P("OOM error in MP3:  Want %d/%d/%d/%d bytes, have %d/%d/%d/%d bytes preallocated.\n",
-          preAllocBuffSize(), preAllocStreamSize(), preAllocFrameSize(), preAllocSynthSize(),
-          preallocateSize, preallocateStreamSize, preallocateFrameSize, preallocateSynthSize);
+//       audioLogger->printf_P("OOM error in MP3:  Want %d/%d/%d/%d bytes, have %d/%d/%d/%d bytes preallocated.\n",
+//           preAllocBuffSize(), preAllocStreamSize(), preAllocFrameSize(), preAllocSynthSize(),
+//           preallocateSize, preallocateStreamSize, preallocateFrameSize, preallocateSynthSize);
       return false;
     }
   } else if (preallocateSpace) {
@@ -315,7 +317,7 @@ bool AudioGeneratorMP3::begin(AudioFileSource *source, AudioOutput *output)
     p += preAllocSynthSize();
     int neededBytes = p - reinterpret_cast<uint8_t *>(preallocateSpace);
     if (neededBytes > preallocateSize) {
-      audioLogger->printf_P("OOM error in MP3:  Want %d bytes, have %d bytes preallocated.\n", neededBytes, preallocateSize);
+//       audioLogger->printf_P("OOM error in MP3:  Want %d bytes, have %d bytes preallocated.\n", neededBytes, preallocateSize);
       return false;
     }
   } else {
@@ -376,13 +378,13 @@ extern "C" {
     if ((freestack < 512) || (freeheap < 5120)) {
       static int laststack, lastheap;
       if (laststack!=freestack|| lastheap !=freeheap) {
-        audioLogger->printf_P(PSTR("%s: FREESTACK=%d, FREEHEAP=%d\n"), s, /*t, i,*/ freestack, /*cont_get_free_stack(&g_cont),*/ freeheap);
+//         audioLogger->printf_P(PSTR("%s: FREESTACK=%d, FREEHEAP=%d\n"), s, /*t, i,*/ freestack, /*cont_get_free_stack(&g_cont),*/ freeheap);
       }
       if (freestack < 256) {
-        audioLogger->printf_P(PSTR("out of stack!\n"));
+//         audioLogger->printf_P(PSTR("out of stack!\n"));
       }
       if (freeheap < 1024) {
-        audioLogger->printf_P(PSTR("out of heap!\n"));
+//         audioLogger->printf_P(PSTR("out of heap!\n"));
       }
       Serial.flush();
       laststack = freestack;

@@ -21,7 +21,8 @@
 #ifndef _AUDIOOUTPUT_H
 #define _AUDIOOUTPUT_H
 
-#include <Arduino.h>
+#include "pico/stdlib.h"
+#include <stdio.h>
 #include "AudioStatus.h"
 
 class AudioOutput
@@ -32,7 +33,8 @@ class AudioOutput
     virtual bool SetRate(int hz) { hertz = hz; return true; }
     virtual bool SetBitsPerSample(int bits) { bps = bits; return true; }
     virtual bool SetChannels(int chan) { channels = chan; return true; }
-    virtual bool SetGain(float f) { if (f>4.0) f = 4.0; if (f<0.0) f=0.0; gainF2P6 = (uint8_t)(f*(1<<6)); return true; }
+    // virtual bool SetGain(float f) { if (f>4.0) f = 4.0; if (f<0.0) f=0.0; gainF2P6 = (uint8_t)(f*(1<<6)); return true; }
+    virtual bool SetGain(float f) { if (f>4.0) f = 4.0; if (f<0.0) f=0.0; gain = f; return true; }
     virtual bool begin() { return false; };
     typedef enum { LEFTCHANNEL=0, RIGHTCHANNEL=1 } SampleIndex;
     virtual bool ConsumeSample(int16_t sample[2]) { (void)sample; return false; }
@@ -72,10 +74,11 @@ class AudioOutput
     }
 
   protected:
-    uint16_t hertz;
+    uint32_t hertz;
     uint8_t bps;
     uint8_t channels;
     uint8_t gainF2P6; // Fixed point 2.6
+    float gain;
 
   protected:
     AudioStatus cb;

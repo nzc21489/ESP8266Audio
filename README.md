@@ -1,3 +1,13 @@
+# ESP8266Audio for pico sdk
+
+ESP8266Audio library for pico-sdk
+
+original : https://github.com/earlephilhower/ESP8266Audio
+
+original readme ↓
+
+---
+
 # ESP8266Audio - supports ESP8266 & ESP32 [![Gitter](https://badges.gitter.im/ESP8266Audio/community.svg)](https://gitter.im/ESP8266Audio/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) 
 Arduino library for parsing and decoding MOD, WAV, MP3, FLAC, MIDI, AAC, and RTTL files and playing them on an I2S DAC or even using a software-simulated delta-sigma DAC with dynamic 32x-128x oversampling.
 

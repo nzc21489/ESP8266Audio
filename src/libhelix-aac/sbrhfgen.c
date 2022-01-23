@@ -53,7 +53,7 @@
 /* newBWTab[prev invfMode][curr invfMode], format = Q31 (table 4.158) 
  * sample file which uses all of these: al_sbr_sr_64_2_fsaac32.aac 
  */
-static const int newBWTab[4][4] PROGMEM = {
+static const int newBWTab[4][4] = {
 	{0x00000000, 0x4ccccccd, 0x73333333, 0x7d70a3d7},
 	{0x4ccccccd, 0x60000000, 0x73333333, 0x7d70a3d7},
 	{0x00000000, 0x60000000, 0x73333333, 0x7d70a3d7},
@@ -76,12 +76,12 @@ static const int newBWTab[4][4] PROGMEM = {
  * Notes:       this is carefully written to be efficient on ARM
  *              use the assembly code version in sbrcov.s when building for ARM!
  **************************************************************************************/
-#if (defined (__arm) && defined (__ARMCC_VERSION)) || (defined (_WIN32) && defined (_WIN32_WCE) && defined (ARM)) || (defined(__GNUC__) && defined(__arm__))
-#ifdef __cplusplus
-extern "C"
-#endif
-void CVKernel1(int *XBuf, int *accBuf);
-#else
+// #if (defined (__arm) && defined (__ARMCC_VERSION)) || (defined (_WIN32) && defined (_WIN32_WCE) && defined (ARM)) || (defined(__GNUC__) && defined(__arm__))
+// #ifdef __cplusplus
+// extern "C"
+// #endif
+// void CVKernel1(int *XBuf, int *accBuf);
+// #else
 void CVKernel1(int *XBuf, int *accBuf)
 {
 	U64 p01re, p01im, p12re, p12im, p11re, p22re;
@@ -139,7 +139,7 @@ void CVKernel1(int *XBuf, int *accBuf)
 	accBuf[8]  = p12im.r.lo32;	accBuf[9]  = p12im.r.hi32;
 	accBuf[10] = p22re.r.lo32;	accBuf[11] = p22re.r.hi32;
 }
-#endif
+// #endif
 
 /**************************************************************************************
  * Function:    CalcCovariance1
@@ -237,12 +237,12 @@ static int CalcCovariance1(int *XBuf, int *p01reN, int *p01imN, int *p12reN, int
  * Notes:       this is carefully written to be efficient on ARM
  *              use the assembly code version in sbrcov.s when building for ARM!
  **************************************************************************************/
-#if (defined (__arm) && defined (__ARMCC_VERSION)) || (defined (_WIN32) && defined (_WIN32_WCE) && defined (ARM)) || (defined(__GNUC__) && defined(__arm__))
-#ifdef __cplusplus
-extern "C"
-#endif
-void CVKernel2(int *XBuf, int *accBuf);
-#else
+// #if (defined (__arm) && defined (__ARMCC_VERSION)) || (defined (_WIN32) && defined (_WIN32_WCE) && defined (ARM)) || (defined(__GNUC__) && defined(__arm__))
+// #ifdef __cplusplus
+// extern "C"
+// #endif
+// void CVKernel2(int *XBuf, int *accBuf);
+// #else
 void CVKernel2(int *XBuf, int *accBuf)
 {
 	U64 p02re, p02im;
@@ -279,7 +279,7 @@ void CVKernel2(int *XBuf, int *accBuf)
 	accBuf[2] = p02im.r.lo32;
 	accBuf[3] = p02im.r.hi32;
 }
-#endif
+// #endif
 
 /**************************************************************************************
  * Function:    CalcCovariance2

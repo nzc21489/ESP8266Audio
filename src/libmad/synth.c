@@ -22,7 +22,7 @@
 #pragma GCC optimize ("O3")
 
 #include <stddef.h>
-#include <pgmspace.h>
+// #include <pgmspace.h>
 #  include "config.h"
 
 # include "global.h"
@@ -563,7 +563,7 @@ void dct32(mad_fixed_t const in[32], unsigned int slot,
 # endif
 
 static
-mad_fixed_t const D[17][32] PROGMEM = {
+mad_fixed_t const D[17][32] = {
 # include "D.dat.h"
 };
 

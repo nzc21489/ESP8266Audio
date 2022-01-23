@@ -22,7 +22,7 @@
 #define _AUDIOFILESOURCESD_H
 
 #include "AudioFileSource.h"
-#include <SD.h>
+#include "ff.h"
 
 
 class AudioFileSourceSD : public AudioFileSource
@@ -41,7 +41,8 @@ class AudioFileSourceSD : public AudioFileSource
     virtual uint32_t getPos() override;
 
   private:
-    File f;
+    FIL f;
+    FRESULT res;
 };
 
 
