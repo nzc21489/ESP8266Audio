@@ -114,6 +114,10 @@ bool AudioOutputI2S::begin(bool txDAC)
     i2s_buff_count = 1;
     buf_num = 0;
     buff_select = 0;
+
+    // set 0 to i2s_buff to avoid noise
+    memset(&i2s_buff[0][0], 0, i2s_buff_size * 2);
+    memset(&i2s_buff[1][0], 0, i2s_buff_size * 2);
   }
 
   i2sOn = true;
@@ -132,12 +136,6 @@ bool AudioOutputI2S::ConsumeSample(int16_t sample[2])
     while (int_count_i2s < (i2s_buff_count - 0))
     {
     }
-  }
-  else // first buffer
-  {
-    // set 0 to i2s_buff to avoid noise
-    memset(&i2s_buff[0][0], 0, i2s_buff_size * 2);
-    memset(&i2s_buff[1][0], 0, i2s_buff_size * 2);
   }
 
   if (bps <= 16)
