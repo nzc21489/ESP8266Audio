@@ -37,7 +37,7 @@ AudioGeneratorOpus::~AudioGeneratorOpus()
   buff = nullptr;
 }
 
-#define OPUS_BUFF 1024
+#define OPUS_BUFF 2048
 
 bool AudioGeneratorOpus::begin(AudioFileSource *source, AudioOutput *output)
 {
