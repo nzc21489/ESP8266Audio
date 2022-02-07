@@ -49,10 +49,10 @@
 // #include <Arduino.h>
 // #include <pgmspace.h>
 
-// Can't fit in ESP8266 RAM
-#ifndef ESP8266
-  #define AAC_ENABLE_SBR 1 
-#endif
+// // Can't fit in ESP8266 RAM
+// #ifndef ESP8266
+//   #define AAC_ENABLE_SBR 1 
+// #endif
 
 #pragma GCC optimize ("O3")
 
