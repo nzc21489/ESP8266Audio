@@ -29,6 +29,8 @@ int32_t *sample_origin = NULL;
 int16_t *sample_gained_16 = NULL;
 int32_t sample_gained_32;
 
+volatile bool stopped = false;
+
 AudioOutputI2S::AudioOutputI2S(uint16_t buffer_count)
 {
   NUM_BUFFER = buffer_count;
@@ -114,6 +116,7 @@ bool AudioOutputI2S::begin(bool txDAC)
     i2s_buff_count = 1;
     buf_num = 0;
     buff_select = 0;
+    stopped = false;
 
     // set 0 to i2s_buff to avoid noise
     memset(&i2s_buff[0][0], 0, i2s_buff_size * 2);
@@ -191,8 +194,16 @@ bool AudioOutputI2S::ConsumeSample(int16_t sample[2])
 
   if (buf_num > i2s_buff_size)
   {
+    if (stopped)
+    {
+      stopped = false;
+      memset(&i2s_buff[(i2s_buff_count + 1) % 2][0], 0, 1000 * 2);
+    }
+
     if (i2s_buff_count == 1)
     {
+      memset(&i2s_buff[0][0], 0, i2s_buff_size * 2);
+      memset(&i2s_buff[1][0], 0, i2s_buff_size * 2);
       i2s_start();
     }
 
@@ -231,6 +242,12 @@ bool AudioOutputI2S::stop()
 {
   if (!i2sOn)
     return false;
+
+  memset(&i2s_buff[0][0], 0, (i2s_buff_size + 4) * 2);
+  memset(&i2s_buff[1][0], 0, (i2s_buff_size + 4) * 2);
+  buf_num = 0;
+  buff_select = 0;
+  stopped = true;
 
 #ifdef ESP32
   i2s_zero_dma_buffer((i2s_port_t)portNo);
