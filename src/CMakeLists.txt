@@ -17,27 +17,6 @@ add_library(ESP8266AudioPico STATIC
 
 target_link_libraries(ESP8266AudioPico fatfs sd_pico pico_audio_i2s_sender pico_stdlib pico_multicore libflac libmad libhelix-aac opusfile libopus libogg)
 
-
-add_library(ESP8266AudioPico_NO_SOFT_VOL STATIC
-        AudioFileSourceSD.cpp
-        AudioGeneratorFLAC.cpp
-        AudioGeneratorWAV.cpp
-        AudioGeneratorMP3.cpp
-        AudioGeneratorAAC.cpp
-        AudioGeneratorOpus.cpp
-        AudioFileSourceID3.cpp
-        AudioOutputI2S.cpp
-        )
-    target_compile_definitions(ESP8266AudioPico_NO_SOFT_VOL PRIVATE
-            PICO_AUDIO_I2S_MONO_OUTPUT=0
-            PICO_AUDIO_I2S_MONO_INPUT=0
-            NO_SOFT_VOL=1
-    )
-
-target_link_libraries(ESP8266AudioPico_NO_SOFT_VOL fatfs sd_pico pico_audio_i2s_sender pico_stdlib pico_multicore libflac libmad libhelix-aac opusfile libopus libogg)
-
-
-
 set_source_files_properties(AudioGeneratorFLAC.cpp PROPERTIES COMPILE_FLAGS -fpermissive)
 
 set(INCLUDE_DIR

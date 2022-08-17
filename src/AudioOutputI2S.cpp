@@ -138,52 +138,62 @@ bool AudioOutputI2S::ConsumeSample(int16_t sample[2])
 
   if (bps <= 16)
   {
-#ifdef NO_SOFT_VOL
-    i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 1] = sample[0];
-    i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 3] = sample[1];
-#else
-    sample_gained_32 = (int32_t)(((double)sample[0]) * gain);
-    sample_gained_16 = (int16_t *)&sample_gained_32;
-    i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 0] = sample_gained_16[1];
-    i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 1] = sample_gained_16[0];
-    sample_gained_32 = (int32_t)(((double)sample[1]) * gain);
-    sample_gained_16 = (int16_t *)&sample_gained_32;
-    i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 2] = sample_gained_16[1];
-    i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 3] = sample_gained_16[0];
-#endif
+    if (gain < 0.99)
+    {
+      sample_gained_32 = (int32_t)(((double)sample[0]) * gain);
+      sample_gained_16 = (int16_t *)&sample_gained_32;
+      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 0] = sample_gained_16[1];
+      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 1] = sample_gained_16[0];
+      sample_gained_32 = (int32_t)(((double)sample[1]) * gain);
+      sample_gained_16 = (int16_t *)&sample_gained_32;
+      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 2] = sample_gained_16[1];
+      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 3] = sample_gained_16[0];
+    }
+    else
+    {
+      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 1] = sample[0];
+      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 3] = sample[1];
+    }
+
     buf_num += 4;
   }
   else // bps = 32
   {
     if (buff_select == 0)
     {
-#ifdef NO_SOFT_VOL
-      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 1] = sample[1];
-      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 0] = sample[0];
-#else
       static const int gain_div  = 1 << 16;
 
-      sample_origin = (int32_t *)sample;
-      sample_gained_32 = (int32_t)(((int64_t)(*sample_origin) * (int64_t)gain_db) / (int64_t)gain_div);
-      sample_gained_16 = (int16_t *)&sample_gained_32;
-      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 1] = sample_gained_16[1];
-      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 0] = sample_gained_16[0];
-#endif
+      if (gain < 0.99)
+      {
+        sample_origin = (int32_t *)sample;
+        sample_gained_32 = (int32_t)(((int64_t)(*sample_origin) * (int64_t)gain_db) / (int64_t)gain_div);
+        sample_gained_16 = (int16_t *)&sample_gained_32;
+        i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 1] = sample_gained_16[1];
+        i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 0] = sample_gained_16[0];
+      }
+      else
+      {
+        i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 1] = sample[1];
+        i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 0] = sample[0];
+      }
     }
     else
     {
-#ifdef NO_SOFT_VOL
-      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 3] = sample[1];
-      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 2] = sample[0];
-#else
       static const int gain_div  = 1 << 16;
 
-      sample_origin = (int32_t *)sample;
-      sample_gained_32 = (int32_t)((*sample_origin) / gain_div )* gain_db;
-      sample_gained_16 = (int16_t *)&sample_gained_32;
-      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 3] = sample_gained_16[1];
-      i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 2] = sample_gained_16[0];
-#endif
+      if (gain < 0.99)
+      {
+        sample_origin = (int32_t *)sample;
+        sample_gained_32 = (int32_t)((*sample_origin) / gain_div )* gain_db;
+        sample_gained_16 = (int16_t *)&sample_gained_32;
+        i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 3] = sample_gained_16[1];
+        i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 2] = sample_gained_16[0];
+      }
+      else
+      {
+        i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 3] = sample[1];
+        i2s_buff[(i2s_buff_count + 1) % 2][buf_num + 2] = sample[0];
+      }
     }
 
     if (buff_select == 1)
